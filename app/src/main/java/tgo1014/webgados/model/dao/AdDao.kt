@@ -1,9 +1,6 @@
 package tgo1014.webgados.model.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import tgo1014.webgados.model.objects.Ad
 
 @Dao
@@ -14,7 +11,7 @@ interface AdDao {
     @Query("SELECT * FROM ad WHERE extendedId = :id")
     fun getById(id: Int): Ad
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(ad: Ad)
 
     @Delete
