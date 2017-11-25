@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">WebGados-Demo</string>
+    <string name="str_try_again">Try again</string>
+    <string name="str_error">Error</string>
+    <string name="str_idade">Idade</string>
+    <string name="str_peso">Peso</string>
+    <string name="str_corretor">Corretor</string>
+    <string name="str_enviar_mensagem">Enviar mensagem</string>
+    <string name="str_salvar_anuncio">Salvar anúncio</string>
+
+</resources>
