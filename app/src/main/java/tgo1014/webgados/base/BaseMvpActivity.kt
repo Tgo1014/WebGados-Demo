@@ -1,6 +1,8 @@
 package tgo1014.webgados.base
 
 import android.support.v7.app.AppCompatActivity
+import tgo1014.webgados.WebGadosApplication
+import tgo1014.webgados.model.database.AdDatabase
 
 abstract class BaseMvpActivity<P : BasePresenter<V>, V> : AppCompatActivity() {
 
@@ -16,4 +18,6 @@ abstract class BaseMvpActivity<P : BasePresenter<V>, V> : AppCompatActivity() {
         presenter?.detachView()
         super.onStop()
     }
+
+    fun getDatabaseInstance(): AdDatabase = (application as WebGadosApplication).adDatabase
 }

@@ -28,12 +28,11 @@ class MainActivity : BaseMvpActivity<MainContract.MainPresenter, MainContract.Ma
         setSupportActionBar(mainToolbar)
         supportActionBar?.title = getString(R.string.app_name)
         mainPresenter = MainPresenterImpl(MainModelImpl())
-
     }
 
     override fun onResume() {
         super.onResume()
-        mainPresenter?.attachView(this)
+        mainPresenter?.attachView(this, getDatabaseInstance())
     }
 
     override fun onDestroy() {

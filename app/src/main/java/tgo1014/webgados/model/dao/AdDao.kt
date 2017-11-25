@@ -11,11 +11,11 @@ interface AdDao {
     @Query("SELECT * FROM ad")
     fun getAll(): List<Ad>
 
-    @Query("SELECT * FROM ad WHERE _id = :id")
-    fun getById(): Ad
+    @Query("SELECT * FROM ad WHERE extendedId = :id")
+    fun getById(id: Int): Ad
 
     @Insert
-    fun insertAll(vararg users: Ad)
+    fun insert(ad: Ad)
 
     @Delete
     fun deleteAd(ad: Ad)

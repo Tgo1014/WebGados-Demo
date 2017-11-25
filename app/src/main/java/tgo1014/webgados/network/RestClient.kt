@@ -10,7 +10,7 @@ import tgo1014.webgados.network.api_results.AdsApiResult
 
 object RestClient {
 
-    private val WEB_GADO_API: WebGadoApi
+    private val WEB_GADOS_API: WebGadosApi
 
     init {
         val interceptor = HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BODY }
@@ -22,8 +22,8 @@ object RestClient {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
 
-        WEB_GADO_API = retrofit.create(WebGadoApi::class.java)
+        WEB_GADOS_API = retrofit.create(WebGadosApi::class.java)
     }
 
-    fun getAds(): Call<AdsApiResult> = WEB_GADO_API.getAds()
+    fun getAds(): Call<AdsApiResult> = WEB_GADOS_API.getAds()
 }

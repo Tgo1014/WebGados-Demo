@@ -1,8 +1,8 @@
 package tgo1014.webgados.presenters
 
 import tgo1014.webgados.contracts.MainContract
+import tgo1014.webgados.model.database.AdDatabase
 import tgo1014.webgados.model.objects.Ad
-import tgo1014.webgados.network.api_results.AdsApiResult
 
 
 class MainPresenterImpl(private var mainModel: MainContract.MainModel) : MainContract.MainPresenter {
@@ -14,12 +14,18 @@ class MainPresenterImpl(private var mainModel: MainContract.MainModel) : MainCon
         requestAds()
     }
 
+    override fun attachView(view: MainContract.MainView, database: AdDatabase) {
+        this.mainView = view
+        mainModel.initDb(database)
+        requestAds()
+    }
+
     override fun detachView() {
         mainView = null
     }
 
     override fun onDestroy(adList: List<Ad>) {
-        mainModel.saveAdsCache(adList)
+        //TODO
     }
 
     override fun onSnackBarClicked() {
@@ -27,14 +33,14 @@ class MainPresenterImpl(private var mainModel: MainContract.MainModel) : MainCon
     }
 
     override fun loadMoreAds() {
-             //TODO
+        //TODO
     }
 
     private fun requestAds() {
-        mainModel.requestAds(object : MainContract.MainModel.OnAdsRequestCompletionListener {
-            override fun onSucess(adList: AdsApiResult) {
+        mainModel.getAll(false, object : MainContract.MainModel.OnAdsRequestCompletionListener {
+            override fun onSucess(adList: List<Ad>) {
                 mainView?.hideLoading()
-                mainView?.showAds(adList.ads)
+                mainView?.showAds(adList)
             }
 
             override fun onError(error: String) {

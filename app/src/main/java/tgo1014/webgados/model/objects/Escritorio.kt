@@ -1,9 +1,13 @@
 package tgo1014.webgados.model.objects
 
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.PrimaryKey
 
+@Entity
 data class Escritorio(
-        var __v: String = "",
+        @PrimaryKey
         var _id: String = "",
+        var __v: String = "",
         var active: String = "",
         var approved_at: String = "",
         var auditRef: String = "",
