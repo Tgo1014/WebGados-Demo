@@ -1,6 +1,7 @@
 package tgo1014.webgados.contracts
 
 import tgo1014.webgados.base.BasePresenter
+import tgo1014.webgados.model.database.AdDatabase
 import tgo1014.webgados.model.objects.Ad
 
 interface DetailContract {
@@ -15,15 +16,13 @@ interface DetailContract {
     }
 
     interface DetailPresenter : BasePresenter<DetailView> {
+        fun attachView(view: DetailView, database: AdDatabase)
         fun adObtained(idAd: Int)
+        fun onBackButtonSelected()
     }
 
     interface DetailModel {
-        interface OnAdRequestCompletionListener {
-            fun onSucess(ad: Ad)
-            fun onError(error: String)
-        }
-
-        fun requestAd(adId: Int, listener: OnAdRequestCompletionListener)
+        fun initDb(database: AdDatabase)
+        fun getAd(adId: Int): Ad?
     }
 }

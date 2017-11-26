@@ -21,23 +21,47 @@ class MainActivity : BaseMvpActivity<MainContract.MainPresenter, MainContract.Ma
     private var mainPresenter: MainContract.MainPresenter? = null
     private lateinit var mainRecyclerAdapter: AdsRecyclerAdapter
     private var mainRecyclerAdList: MutableList<Ad> = ArrayList()
+    private lateinit var gridLayoutManager: GridLayoutManager
+    private var lastItemPosition: Int = -1
+    private var top = -1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(mainToolbar)
         supportActionBar?.title = getString(R.string.app_name)
+
+        gridLayoutManager = GridLayoutManager(this, calcImageGridSizeByOrientation())
         mainPresenter = MainPresenterImpl(MainModelImpl())
+
+        mainSwipeToRefresh.setOnRefreshListener { mainPresenter?.onSwipeToRefresh() }
     }
 
     override fun onResume() {
         super.onResume()
         mainPresenter?.attachView(this, getDatabaseInstance())
+        restoreRecyclerViewPosition()
     }
 
     override fun onDestroy() {
         mainPresenter?.onDestroy(mainRecyclerAdList)
         super.onDestroy()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mainPresenter?.onPause()
+    }
+
+    override fun saveRecyclerViewPosition() {
+        lastItemPosition = gridLayoutManager.findFirstVisibleItemPosition()
+        val v = mainRecycler.getChildAt(0)
+        top = if (v == null) 0 else v.top - mainRecycler.paddingTop
+    }
+
+    override fun restoreRecyclerViewPosition() {
+        gridLayoutManager.scrollToPositionWithOffset(lastItemPosition, top)
     }
 
 
@@ -55,10 +79,7 @@ class MainActivity : BaseMvpActivity<MainContract.MainPresenter, MainContract.Ma
         mainRecyclerAdList.addAll(adList)
         mainRecyclerAdapter = AdsRecyclerAdapter(AdsRecyclerPresenter(mainRecyclerAdList))
         mainRecycler.adapter = mainRecyclerAdapter
-
-        val gridLayoutManager = GridLayoutManager(this, calcImageGridSizeByOrientation())
         mainRecycler.layoutManager = gridLayoutManager
-
         mainRecycler.addOnScrollListener(
                 GridEndlessRecyclerViewScrollListener(
                         gridLayoutManager,
@@ -66,6 +87,10 @@ class MainActivity : BaseMvpActivity<MainContract.MainPresenter, MainContract.Ma
                             mainPresenter?.loadMoreAds()
                             true
                         }))
+    }
+
+    override fun hideSwipeLoading() {
+        mainSwipeToRefresh.isRefreshing = false
     }
 
     override fun showError(error: String) {

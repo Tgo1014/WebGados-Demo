@@ -40,11 +40,11 @@ class MainModelImpl : MainContract.MainModel {
     }
 
     override fun getAll(forceOnline: Boolean, listener: MainContract.MainModel.OnAdsRequestCompletionListener) = runBlocking {
-        val adList: List<Ad> = getAll()
+        val adListCache: List<Ad> = getAll()
 
         if (!forceOnline) {
-            if (adList.isNotEmpty()) {
-                listener.onSucess(adList)
+            if (adListCache.isNotEmpty()) {
+                listener.onSucess(adListCache)
                 return@runBlocking
             }
         }
@@ -55,8 +55,8 @@ class MainModelImpl : MainContract.MainModel {
                 listener.onSucess(adList)
             }
 
-            override fun onError(error: String) {
-                listener.onError("Não foi possível obter os dados")
+            override fun onError(adList: List<Ad>?, error: String) {
+                listener.onError(adListCache,"Não foi possível obter os dados")
             }
         })
     }
@@ -69,11 +69,11 @@ class MainModelImpl : MainContract.MainModel {
                     return
                 }
 
-                listener.onError("Error") //TODO ajustar mensagem neste caso
+                listener.onError(null, "Error") //TODO ajustar mensagem neste caso
             }
 
             override fun onFailure(call: Call<AdsApiResult>, t: Throwable) {
-                listener.onError(t.localizedMessage)
+                listener.onError(null, t.localizedMessage)
             }
         })
     }

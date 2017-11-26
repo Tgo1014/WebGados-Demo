@@ -10,21 +10,26 @@ interface MainContract {
     interface MainView {
         fun showLoading()
         fun hideLoading()
+        fun hideSwipeLoading()
         fun showAds(adList: List<Ad>)
         fun showError(error: String)
+        fun restoreRecyclerViewPosition()
+        fun saveRecyclerViewPosition()
     }
 
     interface MainPresenter : BasePresenter<MainView> {
         fun attachView(view: MainView, database: AdDatabase)
         fun onSnackBarClicked()
         fun loadMoreAds()
+        fun onSwipeToRefresh()
         fun onDestroy(adList: List<Ad>)
+        fun onPause()
     }
 
     interface MainModel : AdDao {
         interface OnAdsRequestCompletionListener {
             fun onSucess(adList: List<Ad>)
-            fun onError(error: String)
+            fun onError(adList: List<Ad>?, error: String)
         }
 
         fun initDb(database: AdDatabase)

@@ -18,10 +18,15 @@ class MainPresenterImpl(private var mainModel: MainContract.MainModel) : MainCon
         this.mainView = view
         mainModel.initDb(database)
         requestAds()
+        mainView?.restoreRecyclerViewPosition()
     }
 
     override fun detachView() {
         mainView = null
+    }
+
+    override fun onPause() {
+        mainView?.saveRecyclerViewPosition()
     }
 
     override fun onDestroy(adList: List<Ad>) {
@@ -30,21 +35,29 @@ class MainPresenterImpl(private var mainModel: MainContract.MainModel) : MainCon
 
     override fun onSnackBarClicked() {
         mainView?.showLoading()
+        requestAds(true)
     }
 
     override fun loadMoreAds() {
         //TODO
     }
 
-    private fun requestAds() {
-        mainModel.getAll(false, object : MainContract.MainModel.OnAdsRequestCompletionListener {
+    override fun onSwipeToRefresh() {
+        requestAds(true)
+    }
+
+    private fun requestAds(forceOnline: Boolean = false) {
+        mainModel.getAll(forceOnline, object : MainContract.MainModel.OnAdsRequestCompletionListener {
             override fun onSucess(adList: List<Ad>) {
                 mainView?.hideLoading()
+                mainView?.hideSwipeLoading()
                 mainView?.showAds(adList)
             }
 
-            override fun onError(error: String) {
+            override fun onError(adList: List<Ad>?, error: String) {
                 mainView?.hideLoading()
+                mainView?.hideSwipeLoading()
+                adList?.run { mainView?.showAds(this) }
                 mainView?.showError(error)
             }
         })

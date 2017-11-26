@@ -6,17 +6,22 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import com.daimajia.slider.library.Indicators.PagerIndicator
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_detail.*
 import tgo1014.webgados.R
 import tgo1014.webgados.base.BaseMvpActivity
 import tgo1014.webgados.contracts.DetailContract
+import tgo1014.webgados.model.DetailModelImpl
 import tgo1014.webgados.model.objects.Ad
+import tgo1014.webgados.presenters.DetailPresenterImpl
+import java.text.NumberFormat
+import java.util.*
 
 class DetailActivity : BaseMvpActivity<DetailContract.DetailPresenter, DetailContract.DetailView>(), DetailContract.DetailView {
 
     private var detailPresenter: DetailContract.DetailPresenter? = null
-    private var Ad_ID_EXTRA = "AdIdExtra"
-    private var ad: Ad? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,11 +31,9 @@ class DetailActivity : BaseMvpActivity<DetailContract.DetailPresenter, DetailCon
         val upArrow: Drawable = resources.getDrawable(R.drawable.abc_ic_ab_back_material)
         upArrow.setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP)
         supportActionBar?.setHomeAsUpIndicator(upArrow)
-    }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        detailPresenter?.onDestroy(ad)
+        detailPresenter = DetailPresenterImpl(DetailModelImpl())
+        detailPresenter?.attachView(this, getDatabaseInstance())
     }
 
     override fun showLoadingToolbar() {
@@ -38,7 +41,9 @@ class DetailActivity : BaseMvpActivity<DetailContract.DetailPresenter, DetailCon
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        detailPresenter?.onOptionsItemSelected(item.itemId)
+        when (item.itemId) {
+            android.R.id.home -> detailPresenter?.onBackButtonSelected()
+        }
         return true
     }
 
@@ -46,51 +51,69 @@ class DetailActivity : BaseMvpActivity<DetailContract.DetailPresenter, DetailCon
         detailTollbarProgressBar.visibility = View.GONE
     }
 
-    override fun showAdDetail(Ad: Ad) {
+    override fun showAdDetail(ad: Ad) {
 
-        this.ad = Ad
-        supportActionBar?.title = Ad.title
+        supportActionBar?.title = ad.title
 
-        detailTollbarProgressBar.visibility = View.VISIBLE
+        val slider = detailBannerSlide
 
-//        Picasso.with(this)
-//                .load(Ad.images.hidpi)
-//                .fit()
-//                .centerInside()
-//                .placeholder(R.drawable.dribbble_logo)
-//                .into(detailImageView, object : Callback {
-//                    override fun onSuccess() {
-//                        detailTollbarProgressBar.visibility = View.GONE
-//                    }
-//
-//                    override fun onError() {
-//                        detailTollbarProgressBar.visibility = View.GONE
-//                        Toast.makeText(this@DetailActivity, "Unable to load image", Toast.LENGTH_SHORT).show()
-//                    }
-//                })
-//
-//        Picasso.with(this)
-//                .load(ad.photos_url[0])
-//                .fit()
-//                .centerInside()
-//                .placeholder(R.drawable.dribbble_logo)
-//                .into(detailAvatar)
+        for (photo in ad.photos_url)
+            slider.addSlider(DefaultSliderView(this).apply { image(photo) })
 
-//        detailTxtComments.text = Ad.comments_count.toString()
-//        detailTxtFavorites.text = Ad.likes_count.toString()
-//        detailTxtViews.text = Ad.views_count.toString()
-//        detailUserName.text = Ad.user.name
-//        detailUserUsername.text = Ad.user.username
-//        detailDescription.text = Html.fromHtml(Ad.description ?: "")
+        //if there's only one photo, stop auto rotating
+        if (ad.photos_url.size == 1) {
+            slider.stopAutoCycle()
+            slider.indicatorVisibility = PagerIndicator.IndicatorVisibility.Invisible
+        }
+
+
+        if (ad.seller_avatar.isNotBlank())
+            Picasso.with(this)
+                    .load(ad.seller_avatar)
+                    .fit()
+                    .centerCrop()
+                    .placeholder(R.drawable.loading_animation)
+                    .into(detail_item_avatar)
+        else
+            Picasso.with(this)
+                    .load(R.drawable.no_avatar)
+                    .fit()
+                    .centerCrop()
+                    .placeholder(R.drawable.loading_animation)
+                    .into(detail_item_avatar)
+
+        //Idade
+        var idade = ""
+        if (ad.years.isNotEmpty())
+            idade += ad.years + if (ad.years.toInt() <= 1) " ano " else " anos "
+        if (ad.months.isNotEmpty())
+            idade += ad.months + if (ad.months.toInt() <= 1) " mês " else " meses "
+        if (idade.isBlank()) idade = "-"
+
+        //Peso
+        val peso = if (ad.average_weight.isBlank()) "-" else "${ad.average_weight} ${ad.weight_type}"
+
+        detail_item_titulo.text = ad.title
+        detail_item_idade.text = idade
+        detail_item_peso.text = peso
+        detail_item_preco.text = NumberFormat.getCurrencyInstance(Locale("pt", "BR")).format(ad.unit_value.toInt() / 100)
+        detail_item_nome_corretor.text = ad.seller_name
+        detail_item_avaliacao_corretor.text = ad.seller_rating
+        detail_item_cidade_estado.text = "${ad.farm.city} - ${ad.farm.state}"
+        detail_item_distancia.text = "30km"
+        detail_item_tipo_preco.text = ad.price_type
     }
 
-    override fun onRetainCustomNonConfigurationInstance(): Any = detailPresenter!!
+    override fun onStop() {
+        detailBannerSlide.stopAutoCycle() //stop auto rotating to avoid memory leaks
+        super.onStop()
+    }
 
     override fun showError() {
-
+        //TODO
     }
 
     override fun getAdIdExtra() {
-        detailPresenter?.adObtained(intent.getIntExtra(Ad_ID_EXTRA, -1))
+        detailPresenter?.adObtained(intent.getIntExtra(Ad.AD_ID_EXTRA, -1))
     }
 }

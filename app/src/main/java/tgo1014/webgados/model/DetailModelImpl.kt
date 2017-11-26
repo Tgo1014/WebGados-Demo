@@ -1,38 +1,20 @@
 package tgo1014.webgados.model
 
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.runBlocking
 import tgo1014.webgados.contracts.DetailContract
-import tgo1014.webgados.model.objects.Ad
+import tgo1014.webgados.model.database.AdDatabase
 
 
 class DetailModelImpl : DetailContract.DetailModel {
 
-    private var AdsCache: Ad? = null
+    var adDb: AdDatabase? = null
 
-    override fun saveAdsCache(Ad: Ad?) {
-        clearAdsCache()
-        this.AdsCache = Ad
+    override fun initDb(database: AdDatabase) {
+        this.adDb = database
     }
 
-    override fun clearAdsCache() {
-        this.AdsCache = null
-    }
-
-    override fun restoreAdsCache(): Ad? = AdsCache
-
-    override fun requestAd(adId: Int, listener: DetailContract.DetailModel.OnAdRequestCompletionListener) {
-//        RestClient.getSingleAd(adId).enqueue(object : Callback<Ad> {
-//            override fun onResponse(call: Call<Ad>, response: Response<Ad>) {
-//                if (response.isSuccessful) {
-//                    listener.onSucess(response.body()!!)
-//                    return
-//                }
-//
-//                listener.onError("Error") //TODO ajustar mensagem neste caso
-//            }
-//
-//            override fun onFailure(call: Call<Ad>, t: Throwable) {
-//                listener.onError(t.localizedMessage)
-//            }
-//        })
+    override fun getAd(adId: Int) = runBlocking {
+        return@runBlocking async { adDb?.adDao()?.getById(adId) }.await()
     }
 }

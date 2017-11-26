@@ -22,11 +22,11 @@
                 android:id="@+id/detailToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:titleTextColor="@color/white"
                 android:layout_weight="1"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
-                android:theme="?attr/actionBarTheme">
+                android:theme="?attr/actionBarTheme"
+                app:titleTextColor="@color/white">
 
                 <ProgressBar
                     android:id="@+id/detailTollbarProgressBar"
@@ -41,16 +41,17 @@
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/detailImageView"
+            <com.daimajia.slider.library.SliderLayout
+                android:id="@+id/detailBannerSlide"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_weight="1.5"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -64,69 +65,188 @@
                 app:cardUseCompatPadding="true">
 
                 <LinearLayout
+                    android:id="@+id/detail_item_body"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/detail_item_titulo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        tools:text="150 Bezerros Nelore" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/detail_item_idade"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                tools:text="10 meses" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/str_idade"
+                                android:textSize="11sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/detail_item_peso"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                tools:text="9 arrobas" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/str_peso"
+                                android:textSize="11sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/detail_item_preco"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textStyle="bold"
+                                tools:text="R$ 1000" />
+
+                            <TextView
+                                android:id="@+id/detail_item_tipo_preco"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="11sp"
+                                tools:text="por cabeça" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <View style="@style/Divider" />
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:id="@+id/detailAvatar"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginBottom="8dp"
+                            android:id="@+id/detail_item_avatar"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
                             android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:src="@drawable/ic_recent" />
+                            tools:src="@tools:sample/avatars" />
 
                         <TextView
-                            android:id="@+id/detailUserName"
+                            android:id="@+id/detail_item_nome_corretor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintBottom_toTopOf="@+id/textView2"
+                            app:layout_constraintStart_toEndOf="@+id/detail_item_avatar"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_chainStyle="packed"
+                            tools:text="Sebastião Teobaldo" />
+
+                        <TextView
+                            android:id="@+id/textView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
                             android:layout_marginLeft="8dp"
                             android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
+                            android:text="@string/str_corretor"
+                            android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/detailAvatar"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:text="Tiago Araujo" />
+                            app:layout_constraintStart_toEndOf="@+id/detail_item_avatar"
+                            app:layout_constraintTop_toBottomOf="@+id/detail_item_nome_corretor" />
+
+                        <ImageView
+                            android:id="@+id/imageView4"
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="2dp"
+                            android:src="@drawable/ic_star"
+                            app:layout_constraintStart_toEndOf="@+id/textView2"
+                            app:layout_constraintTop_toBottomOf="@+id/detail_item_nome_corretor" />
 
                         <TextView
-                            android:id="@+id/detailUserUsername"
+                            android:id="@+id/detail_item_avaliacao_corretor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginStart="2dp"
+                            android:textSize="10sp"
+                            app:layout_constraintStart_toEndOf="@+id/imageView4"
+                            app:layout_constraintTop_toBottomOf="@+id/detail_item_nome_corretor"
+                            tools:text="4.5" />
+
+                        <TextView
+                            android:id="@+id/detail_item_cidade_estado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginTop="8dp"
+                            android:textSize="11sp"
+                            app:layout_constraintBottom_toTopOf="@+id/detail_item_distancia"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_chainStyle="packed"
+                            tools:text="Promissão - SP" />
+
+                        <TextView
+                            android:id="@+id/detail_item_distancia"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:textAllCaps="false"
-                            android:textSize="14sp"
-                            android:textStyle="italic"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:textSize="11sp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/detailUserName"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.571"
-                            tools:text="Tgo1014" />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/detail_item_cidade_estado"
+                            tools:text="a 30 km de você" />
 
                     </android.support.constraint.ConstraintLayout>
-
-                    <ScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="12dp">
-
-                        <TextView
-                            android:id="@+id/detailDescription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </ScrollView>
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
@@ -145,75 +265,59 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:baselineAligned="false"
-                    android:gravity="center">
+                    android:orientation="horizontal">
 
                     <LinearLayout
+                        android:id="@+id/detail_item_send_message"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="5dp">
+                        android:orientation="horizontal"
+                        android:padding="12dp">
 
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_view"
-                            app:tint="#616161" />
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="5dp"
+                            android:src="@drawable/ic_chat" />
 
                         <TextView
-                            android:id="@+id/detailTxtViews"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="9999" />
+                            android:gravity="center"
+                            android:text="@string/str_enviar_mensagem"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/detail_item_save"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="5dp">
+                        android:orientation="horizontal"
+                        android:padding="12dp">
 
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_favorite"
-                            app:tint="#616161" />
-
-                        <TextView
-                            android:id="@+id/detailTxtFavorites"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            tools:text="9999" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="5dp">
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/ic_comment"
-                            app:tint="#616161" />
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="5dp"
+                            android:gravity="center"
+                            android:src="@drawable/ic_save" />
 
                         <TextView
-                            android:id="@+id/detailTxtComments"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            tools:text="9999" />
+                            android:gravity="center"
+                            android:text="@string/str_salvar_anuncio"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
-
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>

@@ -1,10 +1,11 @@
 package tgo1014.webgados.contracts
 
 import tgo1014.webgados.adapters.AdsViewHolder
+import tgo1014.webgados.base.BasePresenter
 
 interface AdsRecyclerContract {
 
-    interface ShotRowView {
+    interface AdRowView {
         fun setData(imageUrl: String,
                     titulo: String,
                     idade: String,
@@ -17,12 +18,15 @@ interface AdsRecyclerContract {
                     distancia: String,
                     tipo_preco: String)
 
-        fun startDetailActivity(idShotDetail: Int)
+        fun startDetailActivity(adDetail: Int)
+        fun showToast(message: String)
     }
 
-    interface ShotRowPresenter {
+    interface ShotRowPresenter : BasePresenter<AdRowView> {
         fun onBindShotRowViewAtPosition(holder: AdsViewHolder, position: Int)
         fun getShotRowsCount(): Int
-        fun onItemClick(holder: AdsViewHolder, adapterPosition: Int)
+        fun onItemSaveClick()
+        fun onItemSendMessageClick()
+        fun onItemBodyClick(holder: AdsViewHolder, adapterPosition: Int)
     }
 }

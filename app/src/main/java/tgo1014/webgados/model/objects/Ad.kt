@@ -58,4 +58,9 @@ data class Ad(
         var views_count: String = "",
         var weight_type: String = "",
         var years: String = "",
-        var months: String = "")
+        var months: String = "") {
+
+    companion object {
+        val AD_ID_EXTRA = "AdIdExtra"
+    }
+}

@@ -7,5 +7,6 @@
     <string name="str_corretor">Corretor</string>
     <string name="str_enviar_mensagem">Enviar mensagem</string>
     <string name="str_salvar_anuncio">Salvar anúncio</string>
+    <string name="str_nao_foi_possivel_obter_dados">Não foi possível obter os dados</string>
 
 </resources>

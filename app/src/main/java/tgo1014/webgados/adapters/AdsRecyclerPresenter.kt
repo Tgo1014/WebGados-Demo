@@ -7,7 +7,25 @@ import java.util.*
 
 class AdsRecyclerPresenter(private var adsList: List<Ad>) : AdsRecyclerContract.ShotRowPresenter {
 
-    override fun onItemClick(holder: AdsViewHolder, adapterPosition: Int) {
+    var adView: AdsRecyclerContract.AdRowView? = null
+
+    override fun attachView(view: AdsRecyclerContract.AdRowView) {
+        this.adView = view
+    }
+
+    override fun detachView() {
+        this.adView = null
+    }
+
+    override fun onItemSaveClick() {
+        adView?.showToast("Save ad not implemented")
+    }
+
+    override fun onItemSendMessageClick() {
+        adView?.showToast("Send message not implemented")
+    }
+
+    override fun onItemBodyClick(holder: AdsViewHolder, adapterPosition: Int) {
         holder.startDetailActivity(adsList[adapterPosition].id.toInt())
     }
 

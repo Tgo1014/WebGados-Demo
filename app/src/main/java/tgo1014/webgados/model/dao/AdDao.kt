@@ -8,7 +8,7 @@ interface AdDao {
     @Query("SELECT * FROM ad")
     fun getAll(): List<Ad>
 
-    @Query("SELECT * FROM ad WHERE extendedId = :id")
+    @Query("SELECT * FROM ad WHERE id = :id")
     fun getById(id: Int): Ad
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
