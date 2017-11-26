@@ -8,7 +8,7 @@ import java.util.*
 class AdsRecyclerPresenter(private var adsList: List<Ad>) : AdsRecyclerContract.ShotRowPresenter {
 
     override fun onItemClick(holder: AdsViewHolder, adapterPosition: Int) {
-        //holder.startDetailActivity(adsList[adapterPosition].id)
+        holder.startDetailActivity(adsList[adapterPosition].id.toInt())
     }
 
     override fun onBindShotRowViewAtPosition(holder: AdsViewHolder, position: Int) {

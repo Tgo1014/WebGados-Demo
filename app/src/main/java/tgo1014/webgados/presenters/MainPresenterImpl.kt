@@ -37,7 +37,7 @@ class MainPresenterImpl(private var mainModel: MainContract.MainModel) : MainCon
     }
 
     private fun requestAds() {
-        mainModel.getAll(true, object : MainContract.MainModel.OnAdsRequestCompletionListener {
+        mainModel.getAll(false, object : MainContract.MainModel.OnAdsRequestCompletionListener {
             override fun onSucess(adList: List<Ad>) {
                 mainView?.hideLoading()
                 mainView?.showAds(adList)

@@ -15,9 +15,7 @@ interface DetailContract {
     }
 
     interface DetailPresenter : BasePresenter<DetailView> {
-        fun onDestroy(ad: Ad?)
         fun adObtained(idAd: Int)
-        fun onOptionsItemSelected(itemId: Int)
     }
 
     interface DetailModel {
@@ -27,8 +25,5 @@ interface DetailContract {
         }
 
         fun requestAd(adId: Int, listener: OnAdRequestCompletionListener)
-        fun saveAdsCache(ad: Ad?)
-        fun restoreAdsCache(): Ad?
-        fun clearAdsCache()
     }
 }

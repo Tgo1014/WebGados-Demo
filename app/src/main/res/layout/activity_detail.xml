@@ -46,7 +46,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <com.github.chrisbanes.photoview.PhotoView
+            <ImageView
                 android:id="@+id/detailImageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

@@ -17,31 +17,16 @@ class DetailPresenterImpl(private var detailModel: DetailContract.DetailModel) :
         this.detailView = null
     }
 
-    override fun onDestroy(ad: Ad?) {
-        detailModel.saveAdsCache(ad)
-    }
-
     override fun adObtained(idAd: Int) {
         requestAd(idAd)
     }
 
-    override fun onOptionsItemSelected(itemId: Int) {
-        when (itemId) {
-            android.R.id.home -> detailView?.onBackPressed()
-        }
-    }
-
     private fun requestAd(AdId: Int) {
-        if (detailModel.restoreAdsCache() != null) {
-            detailView?.hideLoadingToolbar()
-            detailView?.showAdDetail(detailModel.restoreAdsCache()!!)
-            return
-        }
 
         detailModel.requestAd(AdId, object : DetailContract.DetailModel.OnAdRequestCompletionListener {
-            override fun onSucess(Ad: Ad) {
+            override fun onSucess(ad: Ad) {
                 detailView?.hideLoadingToolbar()
-                detailView?.showAdDetail(Ad)
+                detailView?.showAdDetail(ad)
             }
 
             override fun onError(error: String) {
