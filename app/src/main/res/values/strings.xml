@@ -8,5 +8,9 @@
     <string name="str_enviar_mensagem">Enviar mensagem</string>
     <string name="str_salvar_anuncio">Salvar anúncio</string>
     <string name="str_nao_foi_possivel_obter_dados">Não foi possível obter os dados</string>
+    <string name="str_no_more_ads">No more ads to load</string>
+    <string name="str_error_loading_ads">Error while loading ads</string>
+    <string name="str_send_not_implemented">Send message not yet implemented</string>
+    <string name="str_save_not_implemented">Save not yet implemented</string>
 
 </resources>

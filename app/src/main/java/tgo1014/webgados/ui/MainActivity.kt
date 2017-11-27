@@ -1,6 +1,5 @@
 package tgo1014.webgados.ui
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.widget.GridLayoutManager
@@ -22,9 +21,8 @@ class MainActivity : BaseMvpActivity<MainContract.MainPresenter, MainContract.Ma
     private lateinit var mainRecyclerAdapter: AdsRecyclerAdapter
     private var mainRecyclerAdList: MutableList<Ad> = ArrayList()
     private lateinit var gridLayoutManager: GridLayoutManager
-    private var lastItemPosition: Int = -1
-    private var top = -1
-
+    private var lastRecyclerViewItemPosition: Int = -1
+    private var recyclerViewTop = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +30,6 @@ class MainActivity : BaseMvpActivity<MainContract.MainPresenter, MainContract.Ma
         setSupportActionBar(mainToolbar)
         supportActionBar?.title = getString(R.string.app_name)
 
-        gridLayoutManager = GridLayoutManager(this, calcImageGridSizeByOrientation())
         mainPresenter = MainPresenterImpl(MainModelImpl())
 
         mainSwipeToRefresh.setOnRefreshListener { mainPresenter?.onSwipeToRefresh() }
@@ -40,7 +37,7 @@ class MainActivity : BaseMvpActivity<MainContract.MainPresenter, MainContract.Ma
 
     override fun onResume() {
         super.onResume()
-        mainPresenter?.attachView(this, getDatabaseInstance())
+        mainPresenter?.attachView(this, getDatabaseInstance(), resources)
         restoreRecyclerViewPosition()
     }
 
@@ -54,16 +51,24 @@ class MainActivity : BaseMvpActivity<MainContract.MainPresenter, MainContract.Ma
         mainPresenter?.onPause()
     }
 
+    override fun messageNoMoreAds() {
+        showMessage(getString(R.string.str_no_more_ads), false)
+    }
+
+    override fun errorCantLoadMoreAds() {
+        showMessage(getString(R.string.str_error_loading_ads), true, Snackbar.LENGTH_INDEFINITE)
+    }
+
     override fun saveRecyclerViewPosition() {
-        lastItemPosition = gridLayoutManager.findFirstVisibleItemPosition()
+        lastRecyclerViewItemPosition = gridLayoutManager.findFirstVisibleItemPosition()
         val v = mainRecycler.getChildAt(0)
-        top = if (v == null) 0 else v.top - mainRecycler.paddingTop
+        recyclerViewTop = if (v == null) 0 else v.top - mainRecycler.paddingTop
     }
 
     override fun restoreRecyclerViewPosition() {
-        gridLayoutManager.scrollToPositionWithOffset(lastItemPosition, top)
+        if (lastRecyclerViewItemPosition != -1)
+            gridLayoutManager.scrollToPositionWithOffset(lastRecyclerViewItemPosition, recyclerViewTop)
     }
-
 
     override fun showLoading() {
         mainRecycler.visibility = View.GONE
@@ -75,7 +80,11 @@ class MainActivity : BaseMvpActivity<MainContract.MainPresenter, MainContract.Ma
         mainProgressBar.visibility = View.GONE
     }
 
-    override fun showAds(adList: List<Ad>) {
+    override fun showAds(adList: List<Ad>, gridSize: Int) {
+
+        gridLayoutManager = GridLayoutManager(this, gridSize)
+
+        mainRecyclerAdList.clear()
         mainRecyclerAdList.addAll(adList)
         mainRecyclerAdapter = AdsRecyclerAdapter(AdsRecyclerPresenter(mainRecyclerAdList))
         mainRecycler.adapter = mainRecyclerAdapter
@@ -89,21 +98,29 @@ class MainActivity : BaseMvpActivity<MainContract.MainPresenter, MainContract.Ma
                         }))
     }
 
+    override fun showLoadingToolbar() {
+        mainTollbarProgressBar.visibility = View.VISIBLE
+    }
+
+    override fun hideLoadingToolbar() {
+        mainTollbarProgressBar.visibility = View.GONE
+    }
+
     override fun hideSwipeLoading() {
         mainSwipeToRefresh.isRefreshing = false
     }
 
-    override fun showError(error: String) {
-        Snackbar
-                .make(findViewById(R.id.mainLinearLayout), getString(R.string.str_error) + ":" + error, Snackbar.LENGTH_INDEFINITE)
-                .setAction(getString(R.string.str_try_again), { mainPresenter?.onSnackBarClicked() })
-                .show()
-    }
-
-    private fun calcImageGridSizeByOrientation(): Int {
-        if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            return 2
-        return 1
+    /**
+     * Mostra um snackbar com a mensagem informada
+     *
+     * @param message Mensagem que será exibida para o usuário
+     * @param showTryAgain exibe ou não a opção para o usuário tentar novamente
+     * @param snackbarDuration tempo em que o snackbar sera exibido
+     */
+    private fun showMessage(message: String, showTryAgain: Boolean, snackbarDuration: Int = Snackbar.LENGTH_LONG) {
+        val snack = Snackbar.make(findViewById(R.id.mainLinearLayout), message, snackbarDuration)
+        if (showTryAgain) snack.setAction(getString(R.string.str_try_again), { mainPresenter?.onSnackBarClicked() })
+        snack.show()
     }
 }
 

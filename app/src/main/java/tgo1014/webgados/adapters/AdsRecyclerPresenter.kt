@@ -18,11 +18,11 @@ class AdsRecyclerPresenter(private var adsList: List<Ad>) : AdsRecyclerContract.
     }
 
     override fun onItemSaveClick() {
-        adView?.showToast("Save ad not implemented")
+        adView?.showSaveMessage()
     }
 
     override fun onItemSendMessageClick() {
-        adView?.showToast("Send message not implemented")
+        adView?.showSendMessageMessage()
     }
 
     override fun onItemBodyClick(holder: AdsViewHolder, adapterPosition: Int) {

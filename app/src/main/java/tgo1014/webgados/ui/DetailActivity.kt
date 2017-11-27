@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.daimajia.slider.library.Indicators.PagerIndicator
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView
 import com.squareup.picasso.Picasso
@@ -34,6 +35,9 @@ class DetailActivity : BaseMvpActivity<DetailContract.DetailPresenter, DetailCon
 
         detailPresenter = DetailPresenterImpl(DetailModelImpl())
         detailPresenter?.attachView(this, getDatabaseInstance())
+
+        detail_item_save.setOnClickListener { detailPresenter?.onItemSaveClick() }
+        detail_item_send_message.setOnClickListener { detailPresenter?.onItemSendMessageClick() }
     }
 
     override fun showLoadingToolbar() {
@@ -49,6 +53,15 @@ class DetailActivity : BaseMvpActivity<DetailContract.DetailPresenter, DetailCon
 
     override fun hideLoadingToolbar() {
         detailTollbarProgressBar.visibility = View.GONE
+    }
+
+    override fun showSaveMessage() {
+        showToastMessage(getString(R.string.str_save_not_implemented))
+    }
+
+
+    override fun showSendMessageMessage() {
+        showToastMessage(getString(R.string.str_send_not_implemented))
     }
 
     override fun showAdDetail(ad: Ad) {
@@ -116,4 +129,6 @@ class DetailActivity : BaseMvpActivity<DetailContract.DetailPresenter, DetailCon
     override fun getAdIdExtra() {
         detailPresenter?.adObtained(intent.getIntExtra(Ad.AD_ID_EXTRA, -1))
     }
+
+    private fun showToastMessage(message: String) = Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }

@@ -11,6 +11,14 @@ class DetailPresenterImpl(private var detailModel: DetailContract.DetailModel) :
         //TODO("not used")
     }
 
+    override fun onItemSaveClick() {
+        detailView?.showSaveMessage()
+    }
+
+    override fun onItemSendMessageClick() {
+        detailView?.showSendMessageMessage()
+    }
+
     override fun attachView(view: DetailContract.DetailView, database: AdDatabase) {
         this.detailView = view
         detailModel.initDb(database)

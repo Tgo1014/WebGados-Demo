@@ -13,12 +13,16 @@ interface DetailContract {
         fun showLoadingToolbar()
         fun hideLoadingToolbar()
         fun onBackPressed()
+        fun showSaveMessage()
+        fun showSendMessageMessage()
     }
 
     interface DetailPresenter : BasePresenter<DetailView> {
         fun attachView(view: DetailView, database: AdDatabase)
         fun adObtained(idAd: Int)
         fun onBackButtonSelected()
+        fun onItemSaveClick()
+        fun onItemSendMessageClick()
     }
 
     interface DetailModel {

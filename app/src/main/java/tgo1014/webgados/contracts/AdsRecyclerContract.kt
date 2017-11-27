@@ -19,7 +19,8 @@ interface AdsRecyclerContract {
                     tipo_preco: String)
 
         fun startDetailActivity(adDetail: Int)
-        fun showToast(message: String)
+        fun showSaveMessage()
+        fun showSendMessageMessage()
     }
 
     interface ShotRowPresenter : BasePresenter<AdRowView> {

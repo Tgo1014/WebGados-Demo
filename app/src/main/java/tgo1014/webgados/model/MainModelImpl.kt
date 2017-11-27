@@ -44,19 +44,19 @@ class MainModelImpl : MainContract.MainModel {
 
         if (!forceOnline) {
             if (adListCache.isNotEmpty()) {
-                listener.onSucess(adListCache)
+                listener.onSuccess(adListCache)
                 return@runBlocking
             }
         }
 
         requestAdsFromServer(object : MainContract.MainModel.OnAdsRequestCompletionListener {
-            override fun onSucess(adList: List<Ad>) = runBlocking {
+            override fun onSuccess(adList: List<Ad>) = runBlocking {
                 insertAll(adList)
-                listener.onSucess(adList)
+                listener.onSuccess(adList)
             }
 
-            override fun onError(adList: List<Ad>?, error: String) {
-                listener.onError(adListCache,"Não foi possível obter os dados")
+            override fun onError(adList: List<Ad>?) {
+                listener.onError(adListCache)
             }
         })
     }
@@ -65,15 +65,15 @@ class MainModelImpl : MainContract.MainModel {
         RestClient.getAds().enqueue(object : Callback<AdsApiResult> {
             override fun onResponse(call: Call<AdsApiResult>, response: Response<AdsApiResult>) {
                 if (response.isSuccessful) {
-                    listener.onSucess(response.body()?.ads!!)
+                    listener.onSuccess(response.body()?.ads!!)
                     return
                 }
 
-                listener.onError(null, "Error") //TODO ajustar mensagem neste caso
+                listener.onError(null) //TODO ajustar mensagem neste caso
             }
 
             override fun onFailure(call: Call<AdsApiResult>, t: Throwable) {
-                listener.onError(null, t.localizedMessage)
+                listener.onError(null)
             }
         })
     }

@@ -51,8 +51,12 @@ class AdsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AdsRecy
         itemView.detail_item_send_message.setOnClickListener { presenter.onItemSendMessageClick() }
     }
 
-    override fun showToast(message: String) {
-        Toast.makeText(itemView.context, message, Toast.LENGTH_SHORT).show()
+    override fun showSaveMessage() {
+        showToast(itemView.context.getString(R.string.str_save_not_implemented))
+    }
+
+    override fun showSendMessageMessage() {
+        showToast(itemView.context.getString(R.string.str_send_not_implemented))
     }
 
     override fun setData(imageUrl: String,
@@ -105,5 +109,9 @@ class AdsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), AdsRecy
         val intent = Intent(itemView.context, DetailActivity::class.java)
         intent.putExtra(Ad.AD_ID_EXTRA, adDetail)
         itemView.context.startActivity(intent)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(itemView.context, message, Toast.LENGTH_SHORT).show()
     }
 }
