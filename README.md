@@ -9,8 +9,9 @@ App developed using the mocked [WebGados API](https://webgados.com.br/anuncios-e
   - Room
   - 2 layouts based on device orientation
   - Material Design
+  - Offline Support
  # Images
 ![](https://github.com/Tgo1014/WebGados-Demo/raw/master/Images/Screenshot_20171129-094239.png) 
-![](https://github.com/Tgo1014/WebGados-Demo/raw/master/Images/Screenshot_20171129-094253.png)
 ![](https://github.com/Tgo1014/WebGados-Demo/raw/master/Images/Screenshot_20171129-094314.png)
+![](https://github.com/Tgo1014/WebGados-Demo/raw/master/Images/Screenshot_20171129-094253.png)
 ![](https://github.com/Tgo1014/WebGados-Demo/raw/master/Images/Screenshot_20171129-094532.png)
